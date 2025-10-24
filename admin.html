@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - LearnXpert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #00ff88;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff88;
+            text-decoration: none;
+        }
+
+        .admin-title {
+            font-size: 1.2rem;
+            color: #cccccc;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #00ff88;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #cccccc;
+        }
+
+        .admin-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .menu-card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.2);
+            transform: translateY(-5px);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .menu-icon {
+            font-size: 3rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: block;
+        }
+
+        .menu-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .menu-description {
+            color: #cccccc;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .recent-activity {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .activity-title {
+            font-size: 2rem;
+            color: #00ff88;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .activity-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .activity-icon {
+            font-size: 1.5rem;
+            color: #00ff88;
+            width: 40px;
+            text-align: center;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            color: #ffffff;
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-time {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .quick-actions {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .actions-title {
+            font-size: 2rem;
+            color: #00ff88;
+            margin-bottom: 2rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #1a1a1a;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(0, 255, 136, 0.3);
+            color: #cccccc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-menu {
+                grid-template-columns: 1fr;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Verificação de autenticação - deve ser executada imediatamente
+        (function() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            
+            // Se não estiver logado ou não for admin, redirecionar
+            if (!isLoggedIn || !isAdmin || userEmail !== 'kauateixeiralimas@gmail.com') {
+                alert('Acesso negado! Esta área é restrita a administradores.');
+                window.location.href = 'index.html';
+                return;
+            }
+        })();
+    </script>
+    
+    <header class="header">
+        <div>
+            <a href="index.html" class="logo">LearnXpert</a>
+            <div class="admin-title">Painel Administrativo</div>
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn back-btn">← Voltar ao Site</a>
+            <a href="admin_escolas.html" class="nav-btn">Gerenciar Escolas</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="dashboard-header">
+            <h1 class="dashboard-title">Dashboard Administrativo</h1>
+            <p class="dashboard-subtitle">Gerencie o sistema LearnXpert de forma eficiente</p>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🏫</div>
+                <div class="stat-number" id="totalEscolas">5</div>
+                <div class="stat-label">Escolas Cadastradas</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">👨‍🎓</div>
+                <div class="stat-number" id="totalAlunos">1,247</div>
+                <div class="stat-label">Alunos Matriculados</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-number" id="matriculasHoje">23</div>
+                <div class="stat-label">Matrículas Hoje</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-number" id="taxaCrescimento">+15%</div>
+                <div class="stat-label">Crescimento Mensal</div>
+            </div>
+        </section>
+
+        <section class="admin-menu">
+            <a href="admin_escolas.html" class="menu-card">
+                <div class="menu-icon">🏫</div>
+                <h3 class="menu-title">Gerenciar Escolas</h3>
+                <p class="menu-description">
+                    Adicione, edite ou remova escolas do sistema. 
+                    Gerencie informações, níveis de ensino e dados de contato.
+                </p>
+            </a>
+
+            <a href="#" class="menu-card" onclick="alert('Funcionalidade em desenvolvimento')">
+                <div class="menu-icon">👨‍🎓</div>
+                <h3 class="menu-title">Gerenciar Alunos</h3>
+                <p class="menu-description">
+                    Visualize e gerencie matrículas de alunos. 
+                    Acompanhe o status das inscrições e dados dos estudantes.
+                </p>
+            </a>
+
+            <a href="#" class="menu-card" onclick="alert('Funcionalidade em desenvolvimento')">
+                <div class="menu-icon">📊</div>
+                <h3 class="menu-title">Relatórios</h3>
+                <p class="menu-description">
+                    Gere relatórios detalhados sobre matrículas, 
+                    estatísticas de escolas e performance do sistema.
+                </p>
+            </a>
+
+            <a href="#" class="menu-card" onclick="alert('Funcionalidade em desenvolvimento')">
+                <div class="menu-icon">⚙️</div>
+                <h3 class="menu-title">Configurações</h3>
+                <p class="menu-description">
+                    Configure parâmetros do sistema, 
+                    usuários administrativos e preferências gerais.
+                </p>
+            </a>
+        </section>
+
+        <section class="recent-activity">
+            <h2 class="activity-title">Atividades Recentes</h2>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">➕</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Nova escola "Colégio Futuro" foi adicionada ao sistema</div>
+                        <div class="activity-time">Há 2 horas</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">📝</div>
+                    <div class="activity-content">
+                        <div class="activity-text">15 novas matrículas foram processadas hoje</div>
+                        <div class="activity-time">Há 4 horas</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">✏️</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Informações da "Escola Exemplo" foram atualizadas</div>
+                        <div class="activity-time">Ontem</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">📊</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Relatório mensal de matrículas foi gerado</div>
+                        <div class="activity-time">2 dias atrás</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quick-actions">
+            <h2 class="actions-title">Ações Rápidas</h2>
+            <div class="actions-grid">
+                <a href="admin_escolas.html" class="action-btn">+ Nova Escola</a>
+                <button class="action-btn" onclick="alert('Funcionalidade em desenvolvimento')">📊 Gerar Relatório</button>
+                <button class="action-btn" onclick="alert('Funcionalidade em desenvolvimento')">📧 Enviar Newsletter</button>
+                <button class="action-btn" onclick="refreshStats()">🔄 Atualizar Dados</button>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 LearnXpert - Painel Administrativo</p>
+        <p>Sistema de gestão educacional</p>
+    </footer>
+
+    <script>
+        // Função para atualizar estatísticas
+        function refreshStats() {
+            const stats = [
+                { id: 'totalEscolas', min: 3, max: 8 },
+                { id: 'totalAlunos', min: 1000, max: 2000 },
+                { id: 'matriculasHoje', min: 15, max: 35 },
+                { id: 'taxaCrescimento', min: 10, max: 25, suffix: '%' }
+            ];
+
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                const randomValue = Math.floor(Math.random() * (stat.max - stat.min + 1)) + stat.min;
+                
+                if (stat.suffix) {
+                    element.textContent = '+' + randomValue + stat.suffix;
+                } else {
+                    element.textContent = randomValue.toLocaleString();
+                }
+            });
+
+            // Animação de atualização
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 200);
+            });
+        }
+
+        // Atualizar estatísticas automaticamente a cada 30 segundos
+        setInterval(refreshStats, 30000);
+
+        // Animação de entrada das cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.stat-card, .menu-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Função para mostrar notificações
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#00ff88' : '#ff6b6b'};
+                color: #1a1a1a;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                font-weight: bold;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // CSS para animação
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

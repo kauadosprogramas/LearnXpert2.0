@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrícula Online - LearnXpert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #00ff88;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff88;
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #00ff88;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .form-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .form-subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #666;
+            color: #cccccc;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .info-box {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box h3 {
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .info-box ul {
+            color: #cccccc;
+            padding-left: 1.5rem;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+            }
+
+            .form-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">LearnXpert</a>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn back-btn">← Voltar</a>
+            <a href="escola.html" class="nav-btn">Ver Escola</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="form-header">
+            <h1 class="form-title">Matrícula Online</h1>
+            <p class="form-subtitle">Preencha os dados abaixo para matricular seu filho na Escola Exemplo</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </section>
+
+        <div class="info-box">
+            <h3>📋 Documentos Necessários</h3>
+            <ul>
+                <li>Certidão de nascimento do aluno</li>
+                <li>CPF do aluno (se houver)</li>
+                <li>RG e CPF dos responsáveis</li>
+                <li>Comprovante de residência</li>
+                <li>Carteira de vacinação atualizada</li>
+                <li>Histórico escolar (se aplicável)</li>
+            </ul>
+        </div>
+
+        <form id="matriculaForm" class="form-container">
+            <div class="success-message" id="successMessage">
+                ✅ Matrícula enviada com sucesso! Entraremos em contato em breve.
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">👶 Dados do Aluno</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nomeAluno">Nome Completo <span class="required">*</span></label>
+                        <input type="text" id="nomeAluno" name="nomeAluno" required>
+                        <div class="error-message" id="errorNomeAluno">Nome é obrigatório</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dataNascimento">Data de Nascimento <span class="required">*</span></label>
+                        <input type="date" id="dataNascimento" name="dataNascimento" required>
+                        <div class="error-message" id="errorDataNascimento">Data de nascimento é obrigatória</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cpfAluno">CPF do Aluno</label>
+                        <input type="text" id="cpfAluno" name="cpfAluno" placeholder="000.000.000-00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nivelEnsino">Nível de Ensino <span class="required">*</span></label>
+                        <select id="nivelEnsino" name="nivelEnsino" required>
+                            <option value="">Selecione o nível</option>
+                            <option value="creche">Creche</option>
+                            <option value="fundamental">Ensino Fundamental</option>
+                        </select>
+                        <div class="error-message" id="errorNivelEnsino">Nível de ensino é obrigatório</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">👨‍👩‍👧‍👦 Dados do Responsável</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nomeResponsavel">Nome Completo <span class="required">*</span></label>
+                        <input type="text" id="nomeResponsavel" name="nomeResponsavel" required>
+                        <div class="error-message" id="errorNomeResponsavel">Nome do responsável é obrigatório</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cpfResponsavel">CPF <span class="required">*</span></label>
+                        <input type="text" id="cpfResponsavel" name="cpfResponsavel" placeholder="000.000.000-00" required>
+                        <div class="error-message" id="errorCpfResponsavel">CPF é obrigatório</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefone">Telefone <span class="required">*</span></label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999" required>
+                        <div class="error-message" id="errorTelefone">Telefone é obrigatório</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-mail <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                        <div class="error-message" id="errorEmail">E-mail válido é obrigatório</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">📍 Endereço</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cep">CEP <span class="required">*</span></label>
+                        <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+                        <div class="error-message" id="errorCep">CEP é obrigatório</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cidade">Cidade <span class="required">*</span></label>
+                        <input type="text" id="cidade" name="cidade" required>
+                        <div class="error-message" id="errorCidade">Cidade é obrigatória</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="endereco">Endereço Completo <span class="required">*</span></label>
+                    <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro" required>
+                    <div class="error-message" id="errorEndereco">Endereço é obrigatório</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">📝 Informações Adicionais</h2>
+                
+                <div class="form-group">
+                    <label for="observacoes">Observações</label>
+                    <textarea id="observacoes" name="observacoes" placeholder="Informações adicionais sobre o aluno (alergias, necessidades especiais, etc.)"></textarea>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="termos" name="termos" required>
+                    <label for="termos">Aceito os termos e condições <span class="required">*</span></label>
+                </div>
+                <div class="error-message" id="errorTermos">Você deve aceitar os termos</div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    <label for="newsletter">Desejo receber informações por e-mail</label>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="button" class="btn btn-secondary" onclick="limparFormulario()">Limpar</button>
+                <button type="submit" class="btn btn-primary">Enviar Matrícula</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Atualizar barra de progresso
+        function updateProgress() {
+            const form = document.getElementById('matriculaForm');
+            const inputs = form.querySelectorAll('input[required], select[required]');
+            let filled = 0;
+            
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    if (input.checked) filled++;
+                } else if (input.value.trim() !== '') {
+                    filled++;
+                }
+            });
+            
+            const progress = (filled / inputs.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Validação em tempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('matriculaForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                input.addEventListener('input', updateProgress);
+                input.addEventListener('change', updateProgress);
+            });
+
+            // Máscaras para CPF, telefone e CEP
+            document.getElementById('cpfAluno').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value;
+            });
+
+            document.getElementById('cpfResponsavel').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value;
+            });
+
+            document.getElementById('telefone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{2})(\d)/, '($1) $2');
+                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                e.target.value = value;
+            });
+
+            document.getElementById('cep').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                e.target.value = value;
+            });
+        });
+
+        // Validação do formulário
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = [
+                'nomeAluno', 'dataNascimento', 'nivelEnsino',
+                'nomeResponsavel', 'cpfResponsavel', 'telefone', 'email',
+                'cep', 'cidade', 'endereco'
+            ];
+
+            // Limpar mensagens de erro
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+
+            // Validar campos obrigatórios
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    document.getElementById('error' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1)).style.display = 'block';
+                    isValid = false;
+                }
+            });
+
+            // Validar termos
+            if (!document.getElementById('termos').checked) {
+                document.getElementById('errorTermos').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar e-mail
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email && !emailRegex.test(email)) {
+                document.getElementById('errorEmail').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Envio do formulário
+        document.getElementById('matriculaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (validateForm()) {
+                // Simular envio
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('matriculaForm').scrollIntoView({ behavior: 'smooth' });
+                
+                // Limpar formulário após 3 segundos
+                setTimeout(() => {
+                    limparFormulario();
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Limpar formulário
+        function limparFormulario() {
+            document.getElementById('matriculaForm').reset();
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+            updateProgress();
+        }
+    </script>
+</body>
+</html>

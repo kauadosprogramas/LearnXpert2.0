@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia phpMyAdmin - LearnXpert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00ff88;
+        }
+
+        .step h3 {
+            color: #00ff88;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .step-number {
+            background: #00ff88;
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            background: rgba(0, 255, 136, 0.2);
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #00ff88;
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #ffc107;
+        }
+
+        .success {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #28a745;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: #fff;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .credentials {
+            background: rgba(0, 123, 255, 0.1);
+            border: 1px solid rgba(0, 123, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .sql-preview {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .table-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .table-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .table-card h4 {
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">LearnXpert</div>
+        <div class="subtitle">🗄️ Guia Completo - Configuração via phpMyAdmin</div>
+
+        <div class="step">
+            <h3><span class="step-number">1</span>Acessar o phpMyAdmin</h3>
+            <p>Primeiro, certifique-se de que o XAMPP está rodando:</p>
+            <ol>
+                <li>Abra o <strong>XAMPP Control Panel</strong></li>
+                <li>Verifique se <span class="highlight">Apache</span> e <span class="highlight">MySQL</span> estão com status "Running"</li>
+                <li>Se não estiverem, clique em "Start" para cada um</li>
+            </ol>
+            
+            <p>Depois acesse o phpMyAdmin:</p>
+            <a href="http://localhost/phpmyadmin" target="_blank" class="btn">🚀 Abrir phpMyAdmin</a>
+            
+            <div class="warning">
+                <strong>⚠️ Importante:</strong> Se o phpMyAdmin não abrir, verifique se o Apache está rodando na porta 80.
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span>Executar Script SQL</h3>
+            <p>No phpMyAdmin, siga estes passos:</p>
+            <ol>
+                <li>Clique na aba <span class="highlight">"SQL"</span> no menu superior</li>
+                <li>Cole o script SQL completo na área de texto</li>
+                <li>Clique em <span class="highlight">"Executar"</span></li>
+            </ol>
+
+            <p><strong>Script SQL para copiar:</strong></p>
+            <div class="sql-preview">
+                <div class="code-block">
+-- Criar banco de dados
+CREATE DATABASE IF NOT EXISTS `learnxpert` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `learnxpert`;
+
+-- Tabela escolas
+CREATE TABLE IF NOT EXISTS `escolas` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nome` VARCHAR(255) NOT NULL,
+    `logo` VARCHAR(500) NULL,
+    `logo_tipo` ENUM('iniciais', 'imagem') DEFAULT 'iniciais',
+    `localizacao` VARCHAR(255) NOT NULL,
+    `endereco` TEXT,
+    `telefone` VARCHAR(20),
+    `email` VARCHAR(255),
+    `niveis_ensino` JSON,
+    `descricao` TEXT,
+    `ativo` BOOLEAN DEFAULT TRUE,
+    `data_criacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `data_atualizacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela matriculas
+CREATE TABLE IF NOT EXISTS `matriculas` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `escola_id` INT,
+    `nome_aluno` VARCHAR(255) NOT NULL,
+    `data_nascimento` DATE NOT NULL,
+    `cpf` VARCHAR(14) NOT NULL,
+    `rg` VARCHAR(20),
+    `nome_responsavel` VARCHAR(255) NOT NULL,
+    `cpf_responsavel` VARCHAR(14) NOT NULL,
+    `telefone` VARCHAR(20) NOT NULL,
+    `email` VARCHAR(255),
+    `endereco` TEXT NOT NULL,
+    `nivel_ensino` VARCHAR(100) NOT NULL,
+    `turno` VARCHAR(50) NOT NULL,
+    `observacoes` TEXT,
+    `status` ENUM('pendente', 'aprovada', 'rejeitada') DEFAULT 'pendente',
+    `data_matricula` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`escola_id`) REFERENCES `escolas`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabela usuarios
+CREATE TABLE IF NOT EXISTS `usuarios` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nome` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) UNIQUE NOT NULL,
+    `senha` VARCHAR(255) NOT NULL,
+    `tipo` ENUM('admin', 'escola') DEFAULT 'admin',
+    `escola_id` INT NULL,
+    `ativo` BOOLEAN DEFAULT TRUE,
+    `data_criacao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (`escola_id`) REFERENCES `escolas`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dados de exemplo
+INSERT INTO `escolas` (nome, logo, logo_tipo, localizacao, endereco, telefone, email, niveis_ensino, descricao) VALUES 
+('Escola Exemplo', 'EX', 'iniciais', 'Cidade X', 'Rua das Flores, 123', '(11) 99999-9999', 'contato@escolaexemplo.com', '["Creche", "Ensino Fundamental"]', 'Escola de qualidade com mais de 20 anos de experiência.');
+
+INSERT INTO `usuarios` (nome, email, senha, tipo) VALUES 
+('Administrador', 'admin@learnxpert.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
+                </div>
+            </div>
+
+            <a href="learnxpert_database.sql" target="_blank" class="btn btn-secondary">📄 Ver Script Completo</a>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span>Verificar Criação das Tabelas</h3>
+            <p>Após executar o script, verifique se tudo foi criado:</p>
+            
+            <div class="table-info">
+                <div class="table-card">
+                    <h4>📊 Banco de Dados</h4>
+                    <ul>
+                        <li>Nome: <span class="highlight">learnxpert</span></li>
+                        <li>Charset: utf8mb4</li>
+                        <li>Collation: utf8mb4_unicode_ci</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>🏫 Tabela: escolas</h4>
+                    <ul>
+                        <li>13 campos</li>
+                        <li>Suporte a logos</li>
+                        <li>Dados JSON para níveis</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>📝 Tabela: matriculas</h4>
+                    <ul>
+                        <li>16 campos</li>
+                        <li>Relacionamento com escolas</li>
+                        <li>Status de matrícula</li>
+                    </ul>
+                </div>
+                
+                <div class="table-card">
+                    <h4>👤 Tabela: usuarios</h4>
+                    <ul>
+                        <li>8 campos</li>
+                        <li>Autenticação segura</li>
+                        <li>Tipos de usuário</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">4</span>Credenciais de Acesso</h3>
+            <div class="credentials">
+                <h4>🔑 Login do Sistema:</h4>
+                <ul>
+                    <li><strong>Email:</strong> admin@learnxpert.com</li>
+                    <li><strong>Senha:</strong> admin123</li>
+                </ul>
+            </div>
+            
+            <div class="credentials">
+                <h4>🗄️ Acesso ao Banco:</h4>
+                <ul>
+                    <li><strong>Host:</strong> localhost</li>
+                    <li><strong>Usuário:</strong> root</li>
+                    <li><strong>Senha:</strong> (vazia)</li>
+                    <li><strong>Banco:</strong> learnxpert</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">5</span>Testar o Sistema</h3>
+            <p>Após configurar o banco, teste todas as funcionalidades:</p>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <a href="admin_escolas.html" class="btn">🏫 Admin Escolas</a>
+                <a href="index.html" class="btn">🏠 Página Inicial</a>
+                <a href="debug_api.php" class="btn btn-secondary">🐛 Debug API</a>
+            </div>
+            
+            <div class="success">
+                <strong>✅ Checklist de Teste:</strong>
+                <ul>
+                    <li>Login no admin funciona</li>
+                    <li>Adicionar nova escola</li>
+                    <li>Upload de logo</li>
+                    <li>Editar escola existente</li>
+                    <li>Excluir escola</li>
+                    <li>Buscar escolas na página inicial</li>
+                    <li>Fazer matrícula</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">6</span>Comandos SQL Úteis</h3>
+            <p>Comandos para gerenciar o banco via phpMyAdmin:</p>
+            
+            <div class="code-block">
+-- Ver todas as escolas
+SELECT * FROM escolas;
+
+-- Ver matrículas pendentes
+SELECT * FROM matriculas WHERE status = 'pendente';
+
+-- Contar escolas por localização
+SELECT localizacao, COUNT(*) as total FROM escolas GROUP BY localizacao;
+
+-- Ver usuários do sistema
+SELECT id, nome, email, tipo FROM usuarios;
+
+-- Adicionar nova escola
+INSERT INTO escolas (nome, logo, logo_tipo, localizacao, endereco, telefone, email, niveis_ensino, descricao) 
+VALUES ('Nova Escola', 'NE', 'iniciais', 'Sua Cidade', 'Endereço', 'Telefone', 'email@escola.com', '["Ensino Médio"]', 'Descrição');
+
+-- Atualizar escola
+UPDATE escolas SET nome = 'Novo Nome' WHERE id = 1;
+
+-- Excluir escola (soft delete)
+UPDATE escolas SET ativo = 0 WHERE id = 1;
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 2rem 0;">
+            <div class="success">
+                <h3>🎉 Sistema Pronto!</h3>
+                <p>Seu banco de dados está configurado e funcionando perfeitamente via phpMyAdmin!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Escolas - LearnXpert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #00ff88;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff88;
+            text-decoration: none;
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            color: #cccccc;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid #00ff88;
+            color: #00ff88;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #00ff88;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .main-subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            width: 300px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #666;
+            color: #cccccc;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: #4CAF50;
+            color: #ffffff;
+        }
+
+        .btn-edit:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .schools-table {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table th {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .table td {
+            color: #cccccc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            margin: 2% auto;
+            padding: 1.5rem;
+            border: 1px solid #00ff88;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #00ff88;
+        }
+
+        .close {
+            color: #cccccc;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #ff6b6b;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Estilos específicos para seletores */
+        .form-group select {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .form-group select option {
+            background: #2d2d2d;
+            color: #ffffff;
+            padding: 0.5rem;
+        }
+
+        .form-group select:disabled {
+            color: #666666;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            max-height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #00ff88;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: bold;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            background: #00ff88;
+            color: #1a1a1a;
+        }
+
+        .notification.error {
+            background: #ff6b6b;
+            color: #ffffff;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Estilos para upload de logo */
+        .logo-upload-container {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            margin-top: 0.5rem;
+        }
+
+        .logo-preview-section {
+            flex: 1;
+        }
+
+        .logo-preview {
+            width: 120px;
+            height: 120px;
+            border: 2px dashed rgba(0, 255, 136, 0.5);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .preview-text {
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .logo-fallback {
+            margin-top: 1rem;
+        }
+
+        .logo-fallback label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .logo-fallback input {
+            width: 120px;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 5px;
+            color: #ffffff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-upload-section {
+            flex: 1;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+            color: #1a1a1a;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .remove-btn {
+            background: #ff6b6b;
+            color: #ffffff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        .remove-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .upload-info {
+            color: #999;
+            font-size: 0.8rem;
+            margin: 0.5rem 0;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .logo-upload-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.5rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: 1% auto;
+                width: 95%;
+                max-height: 95vh;
+                padding: 1rem;
+            }
+
+            .main-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Verificação de autenticação - deve ser executada imediatamente
+        (function() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            
+            // Se não estiver logado ou não for admin, redirecionar
+            if (!isLoggedIn || !isAdmin || userEmail !== 'kauateixeiralimas@gmail.com') {
+                alert('Acesso negado! Esta área é restrita a administradores.');
+                window.location.href = 'index.html';
+                return;
+            }
+        })();
+    </script>
+    
+    <header class="header">
+        <div>
+            <a href="index.html" class="logo">LearnXpert</a>
+            <div class="page-title">Gerenciar Escolas</div>
+        </div>
+        <div class="nav-buttons">
+            <a href="admin.html" class="nav-btn back-btn">← Voltar ao Admin</a>
+            <a href="index.html" class="nav-btn">Site Principal</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="page-header">
+            <h1 class="main-title">Gerenciamento de Escolas</h1>
+            <p class="main-subtitle">Adicione, edite e gerencie as escolas parceiras do sistema</p>
+        </section>
+
+        <section class="controls">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar escolas...">
+                <button class="btn btn-secondary" onclick="clearSearch()">Limpar</button>
+            </div>
+            <button class="btn btn-primary" onclick="openModal()">+ Adicionar Nova Escola</button>
+        </section>
+
+        <section class="schools-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Logo</th>
+                        <th>Nome da Escola</th>
+                        <th>Localização</th>
+                        <th>Níveis de Ensino</th>
+                        <th>Contato</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="schoolsTableBody">
+                    <tr>
+                        <td colspan="6" class="loading">Carregando escolas...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div id="schoolModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Adicionar Nova Escola</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            
+            <form id="schoolForm">
+                <div class="form-group">
+                    <label for="nome">Nome da Escola <span class="required">*</span></label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="logo">Logo da Escola</label>
+                    <div class="logo-upload-container">
+                        <div class="logo-preview-section">
+                            <div class="logo-preview" id="logoPreview">
+                                <span class="preview-text">Preview da Logo</span>
+                            </div>
+                            <div class="logo-fallback">
+                                <label for="logoText">Iniciais (alternativa) <span class="required">*</span></label>
+                                <input type="text" id="logoText" name="logoText" placeholder="Ex: EX" maxlength="3" required>
+                            </div>
+                        </div>
+                        <div class="logo-upload-section">
+                            <input type="file" id="logoFile" name="logoFile" accept="image/*" style="display: none;">
+                            <button type="button" class="upload-btn" onclick="document.getElementById('logoFile').click()">
+                                📁 Escolher Imagem
+                            </button>
+                            <p class="upload-info">Formatos aceitos: JPG, PNG, GIF (máx. 2MB)</p>
+                            <button type="button" class="remove-btn" id="removeLogoBtn" onclick="removeLogo()" style="display: none;">
+                                🗑️ Remover Imagem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado">Estado <span class="required">*</span></label>
+                    <select id="estado" name="estado" required onchange="carregarCidades()">
+                        <option value="">Selecione o estado</option>
+                        <option value="SC">Santa Catarina (SC)</option>
+                        <option value="SP">São Paulo (SP)</option>
+                        <option value="RJ">Rio de Janeiro (RJ)</option>
+                        <option value="MG">Minas Gerais (MG)</option>
+                        <option value="PR">Paraná (PR)</option>
+                        <option value="RS">Rio Grande do Sul (RS)</option>
+                        <option value="ES">Espírito Santo (ES)</option>
+                        <option value="RN">Rio Grande do Norte (RN)</option>
+                        <option value="PB">Paraíba (PB)</option>
+                        <option value="PE">Pernambuco (PE)</option>
+                        <option value="AL">Alagoas (AL)</option>
+                        <option value="SE">Sergipe (SE)</option>
+                        <option value="BA">Bahia (BA)</option>
+                        <option value="GO">Goiás (GO)</option>
+                        <option value="DF">Distrito Federal (DF)</option>
+                        <option value="MT">Mato Grosso (MT)</option>
+                        <option value="MS">Mato Grosso do Sul (MS)</option>
+                        <option value="TO">Tocantins (TO)</option>
+                        <option value="MA">Maranhão (MA)</option>
+                        <option value="PI">Piauí (PI)</option>
+                        <option value="CE">Ceará (CE)</option>
+                        <option value="RR">Roraima (RR)</option>
+                        <option value="AP">Amapá (AP)</option>
+                        <option value="AM">Amazonas (AM)</option>
+                        <option value="AC">Acre (AC)</option>
+                        <option value="PA">Pará (PA)</option>
+                        <option value="RO">Rondônia (RO)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cidade">Cidade <span class="required">*</span></label>
+                    <select id="cidade" name="cidade" required disabled>
+                        <option value="">Primeiro selecione o estado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="endereco">Endereço Completo</label>
+                    <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="(11) 99999-9999">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="contato@escola.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Níveis de Ensino</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="creche" name="niveis" value="Creche">
+                            <label for="creche">Creche</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fundamental" name="niveis" value="Ensino Fundamental">
+                            <label for="fundamental">Ensino Fundamental</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="medio" name="niveis" value="Ensino Médio">
+                            <label for="medio">Ensino Médio</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tecnico" name="niveis" value="Ensino Técnico">
+                            <label for="tecnico">Ensino Técnico</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao" name="descricao" placeholder="Descrição da escola..."></textarea>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let schools = [];
+        let editingId = null;
+
+        // Carregar escolas da API
+        async function loadSchools() {
+            const tbody = document.getElementById('schoolsTableBody');
+            
+            try {
+                // Mostrar loading
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">⏳</div>
+                            <div>Carregando escolas...</div>
+                        </td>
+                    </tr>
+                `;
+
+                const response = await fetch('api/escolas.php');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const responseText = await response.text();
+                console.log('Resposta da API:', responseText);
+                
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('Erro ao fazer parse do JSON:', parseError);
+                    console.error('Resposta recebida:', responseText);
+                    throw new Error('API retornou dados inválidos (não é JSON válido)');
+                }
+                
+                if (data.success && data.data) {
+                    console.log('DEBUG: Dados recebidos da API:', data.data);
+                    
+                    schools = data.data.map(escola => {
+                        console.log('DEBUG: Processando escola:', escola.nome, 'logo_tipo:', escola.logo_tipo, 'logo length:', escola.logo ? escola.logo.length : 'null');
+                        
+                        return {
+                            id: escola.id,
+                            nome: escola.nome,
+                            logo: escola.logo || escola.nome.substring(0, 2).toUpperCase(),
+                            logo_tipo: escola.logo_tipo || 'iniciais', // IMPORTANTE: Preservar logo_tipo
+                            localizacao: escola.localizacao,
+                            endereco: escola.endereco || '',
+                            telefone: escola.telefone || '',
+                            email: escola.email || '',
+                            niveis: Array.isArray(escola.niveis_ensino) ? escola.niveis_ensino : [],
+                            descricao: escola.descricao || ''
+                        };
+                    });
+                    
+                    renderSchools();
+                } else {
+                    throw new Error(data.message || 'Erro ao carregar escolas');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar escolas:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">❌</div>
+                            <div>Erro ao carregar escolas: ${error.message}</div>
+                            <button class="btn btn-primary" onclick="loadSchools()" style="margin-top: 1rem;">Tentar Novamente</button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Renderizar escolas na tabela
+        function renderSchools() {
+            const tbody = document.getElementById('schoolsTableBody');
+            
+            if (schools.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">🏫</div>
+                            <div>Nenhuma escola cadastrada</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = schools.map(school => {
+                console.log('DEBUG: Renderizando escola:', school.nome, 'logo_tipo:', school.logo_tipo, 'logo válida:', !!school.logo);
+                
+                // Função para gerar logo
+                const generateLogo = () => {
+                    console.log('DEBUG: Gerando logo para', school.nome);
+                    console.log('DEBUG: logo_tipo:', school.logo_tipo);
+                    console.log('DEBUG: logo existe:', !!school.logo);
+                    console.log('DEBUG: logo começa com data:', school.logo ? school.logo.startsWith('data:') : false);
+                    
+                    if (school.logo_tipo === 'imagem' && school.logo && (school.logo.startsWith('data:image') || school.logo.startsWith('data:image/svg+xml'))) {
+                        console.log('DEBUG: Renderizando imagem para', school.nome, 'src length:', school.logo.length);
+                        console.log('DEBUG: Primeiros 100 chars:', school.logo.substring(0, 100));
+                        
+                        // Limpar dados da imagem removendo possíveis caracteres inválidos
+                        const cleanImageData = school.logo.replace(/\s+/g, '').trim();
+                        console.log('DEBUG: Dados limpos, length:', cleanImageData.length);
+                        
+                        // Se é uma imagem válida, mostrar a imagem
+                        return `<img src="${cleanImageData}" alt="Logo ${school.nome}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="console.error('Erro ao carregar imagem para ${school.nome}:', this.src.substring(0, 100))">`;
+                    } else {
+                        console.log('DEBUG: Renderizando iniciais para', school.nome, '(logo_tipo não é imagem ou logo inválida)');
+                        // Se são iniciais ou não há imagem válida, mostrar iniciais
+                        const iniciais = (school.logo && school.logo_tipo === 'iniciais') ? school.logo : school.nome.split(' ').map(word => word[0]).join('').substring(0, 2).toUpperCase();
+                        return `<div style="width: 40px; height: 40px; background: #00ff88; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #1a1a1a; font-size: 14px;">
+                            ${iniciais}
+                        </div>`;
+                    }
+                };
+                
+                return `
+                <tr>
+                    <td>
+                        ${generateLogo()}
+                    </td>
+                    <td>${school.nome}</td>
+                    <td>${school.localizacao}</td>
+                    <td>${Array.isArray(school.niveis) ? school.niveis.join(', ') : ''}</td>
+                    <td>
+                        ${school.telefone ? `📞 ${school.telefone}<br>` : ''}
+                        ${school.email ? `📧 ${school.email}` : ''}
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-edit btn-small" onclick="editSchool(${school.id})">Editar</button>
+                            <button class="btn btn-danger btn-small" onclick="deleteSchool(${school.id})">Excluir</button>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Abrir modal
+        function openModal(schoolId = null) {
+            console.log('=== DEBUG: openModal chamada ===');
+            console.log('schoolId:', schoolId);
+            
+            const modal = document.getElementById('schoolModal');
+            const form = document.getElementById('schoolForm');
+            const title = document.getElementById('modalTitle');
+            
+            editingId = schoolId;
+            
+            // Só fazer reset se for uma nova escola
+            if (!schoolId) {
+                console.log('DEBUG: Nova escola - fazendo reset do formulário');
+                form.reset();
+            }
+            
+            if (schoolId) {
+                const school = schools.find(s => s.id == schoolId);
+                console.log('DEBUG: Escola encontrada:', school);
+                if (school) {
+                    title.textContent = 'Editar Escola';
+                    document.getElementById('nome').value = school.nome;
+                    document.getElementById('estado').value = school.estado || '';
+                    document.getElementById('cidade').value = school.cidade || '';
+                    
+                    // Carregar cidades do estado se houver estado selecionado
+                    if (school.estado) {
+                        carregarCidades();
+                        // Aguardar um pouco para as cidades carregarem e então selecionar a cidade
+                        setTimeout(() => {
+                            document.getElementById('cidade').value = school.cidade || '';
+                        }, 100);
+                    }
+                    
+                    document.getElementById('endereco').value = school.endereco || '';
+                    document.getElementById('telefone').value = school.telefone || '';
+                    document.getElementById('email').value = school.email || '';
+                    document.getElementById('descricao').value = school.descricao || '';
+                    
+                    console.log('DEBUG: logo_tipo:', school.logo_tipo);
+                    console.log('DEBUG: logo existe:', !!school.logo);
+                    
+                    // Usar logo_tipo para determinar como exibir a logo
+                    if (school.logo_tipo === 'imagem' && school.logo) {
+                        console.log('DEBUG: Carregando imagem no preview (logo_tipo = imagem)');
+                        // É uma imagem
+                        logoImageData = school.logo;
+                        showLogoPreview(school.logo);
+                        document.getElementById('logoText').value = '';
+                        console.log('DEBUG: Preview da imagem definido');
+                    } else if (school.logo_tipo === 'iniciais' && school.logo) {
+                        console.log('DEBUG: Carregando iniciais (logo_tipo = iniciais)');
+                        // São iniciais
+                        document.getElementById('logoText').value = school.logo;
+                        logoImageData = null;
+                        // Limpar preview
+                        const preview = document.getElementById('logoPreview');
+                        const removeBtn = document.getElementById('removeLogoBtn');
+                        preview.innerHTML = '<span class="preview-text">Preview da Logo</span>';
+                        removeBtn.style.display = 'none';
+                    } else {
+                        console.log('DEBUG: Caso padrão - sem logo ou logo_tipo indefinido');
+                        // Caso padrão
+                        document.getElementById('logoText').value = '';
+                        logoImageData = null;
+                        // Limpar preview
+                        const preview = document.getElementById('logoPreview');
+                        const removeBtn = document.getElementById('removeLogoBtn');
+                        preview.innerHTML = '<span class="preview-text">Preview da Logo</span>';
+                        removeBtn.style.display = 'none';
+                    }
+                    
+                    // Marcar checkboxes - verificar se niveis é array
+                    const niveis = Array.isArray(school.niveis) ? school.niveis : [];
+                    document.querySelectorAll('input[name="niveis"]').forEach(checkbox => {
+                        checkbox.checked = niveis.includes(checkbox.value);
+                    });
+                }
+            } else {
+                console.log('DEBUG: Nova escola - limpando preview');
+                title.textContent = 'Adicionar Nova Escola';
+                // Limpar dados de logo ao adicionar nova escola
+                logoImageData = null;
+                const preview = document.getElementById('logoPreview');
+                const removeBtn = document.getElementById('removeLogoBtn');
+                preview.innerHTML = '<span class="preview-text">Preview da Logo</span>';
+                removeBtn.style.display = 'none';
+            }
+            
+            console.log('DEBUG: Abrindo modal');
+            modal.style.display = 'block';
+            
+            // Verificar estado do preview após abrir modal
+            setTimeout(() => {
+                const preview = document.getElementById('logoPreview');
+                console.log('DEBUG: Estado do preview após 100ms:', preview.innerHTML);
+            }, 100);
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('schoolModal').style.display = 'none';
+            editingId = null;
+        }
+
+        // Editar escola
+        function editSchool(id) {
+            openModal(id);
+        }
+
+        // Excluir escola
+        async function deleteSchool(id) {
+            const school = schools.find(s => s.id === id);
+            if (school && confirm(`Tem certeza que deseja excluir a escola "${school.nome}"?`)) {
+                try {
+                    const response = await fetch(`api/escolas.php?id=${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    const responseText = await response.text();
+                    console.log('Resposta da API (excluir):', responseText);
+
+                    let data;
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (parseError) {
+                        console.error('Erro ao fazer parse do JSON:', parseError);
+                        throw new Error('API retornou dados inválidos');
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(data.message || data.error || `HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    // Verificar se a resposta contém uma mensagem de sucesso
+                    if (data.message && data.message.includes('sucesso')) {
+                        showNotification('Escola excluída com sucesso!', 'success');
+                        loadSchools();
+                    } else {
+                        throw new Error(data.error || 'Erro ao excluir escola');
+                    }
+                } catch (error) {
+                    console.error('Erro ao excluir escola:', error);
+                    showNotification(`Erro ao excluir escola: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        // Salvar escola
+        document.getElementById('schoolForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            console.log('=== DEBUG: Submit do formulário ===');
+            console.log('logoImageData existe:', !!logoImageData);
+            console.log('logoImageData length:', logoImageData ? logoImageData.length : 'null');
+            
+            const formData = new FormData(e.target);
+            const niveis = Array.from(document.querySelectorAll('input[name="niveis"]:checked')).map(cb => cb.value);
+            
+            // Priorizar imagem de logo sobre iniciais
+            let logoValue = '';
+            if (logoImageData) {
+                // Se há uma imagem carregada, usar a imagem
+                logoValue = logoImageData;
+                console.log('DEBUG: Usando logoImageData, preview:', logoValue.substring(0, 50) + '...');
+            } else if (formData.get('logoText')) {
+                // Se não há imagem, usar as iniciais
+                logoValue = formData.get('logoText').toUpperCase();
+                console.log('DEBUG: Usando logoText:', logoValue);
+            }
+            
+            const schoolData = {
+                nome: formData.get('nome'),
+                logo: logoValue,
+                estado: formData.get('estado'),
+                cidade: formData.get('cidade'),
+                endereco: formData.get('endereco'),
+                telefone: formData.get('telefone'),
+                email: formData.get('email'),
+                niveis_ensino: niveis,
+                descricao: formData.get('descricao')
+            };
+            
+            console.log('DEBUG: Dados que serão enviados:', {
+                ...schoolData,
+                logo: schoolData.logo ? schoolData.logo.substring(0, 50) + '...' : 'vazio'
+            });
+            
+            try {
+                if (editingId) {
+                    // Editar escola existente
+                    await updateSchool(editingId, schoolData);
+                } else {
+                    // Adicionar nova escola
+                    await addSchool(schoolData);
+                }
+                
+                loadSchools();
+                closeModal();
+            } catch (error) {
+                console.error('Erro ao salvar escola:', error);
+                showNotification(`Erro ao salvar escola: ${error.message}`, 'error');
+            }
+        });
+
+        // Função para adicionar nova escola
+        async function addSchool(schoolData) {
+            try {
+                const response = await fetch('api/escolas.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(schoolData)
+                });
+
+                const responseText = await response.text();
+                console.log('Resposta da API (adicionar):', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('Erro ao fazer parse do JSON:', parseError);
+                    throw new Error('API retornou dados inválidos');
+                }
+
+                if (!response.ok) {
+                    throw new Error(data.message || data.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                // Verificar se a resposta contém uma mensagem de sucesso
+                if (data.message && data.message.includes('sucesso')) {
+                    showNotification('Escola adicionada com sucesso!', 'success');
+                } else {
+                    throw new Error(data.error || 'Erro ao adicionar escola');
+                }
+            } catch (error) {
+                console.error('Erro ao adicionar escola:', error);
+                throw error;
+            }
+        }
+
+        // Função para atualizar escola existente
+        async function updateSchool(id, schoolData) {
+            try {
+                const response = await fetch(`api/escolas.php?id=${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(schoolData)
+                });
+
+                const responseText = await response.text();
+                console.log('Resposta da API (atualizar):', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('Erro ao fazer parse do JSON:', parseError);
+                    throw new Error('API retornou dados inválidos');
+                }
+
+                if (!response.ok) {
+                    throw new Error(data.message || data.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                // Verificar se a resposta contém uma mensagem de sucesso
+                if (data.message && data.message.includes('sucesso')) {
+                    showNotification('Escola atualizada com sucesso!', 'success');
+                } else {
+                    throw new Error(data.error || 'Erro ao atualizar escola');
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar escola:', error);
+                throw error;
+            }
+        }
+
+        // Buscar escolas
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredSchools = schools.filter(school => 
+                school.nome.toLowerCase().includes(searchTerm) ||
+                school.localizacao.toLowerCase().includes(searchTerm) ||
+                school.niveis.some(nivel => nivel.toLowerCase().includes(searchTerm))
+            );
+            
+            const tbody = document.getElementById('schoolsTableBody');
+            
+            if (filteredSchools.length === 0 && searchTerm) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">🔍</div>
+                            <div>Nenhuma escola encontrada para "${searchTerm}"</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Temporariamente substituir schools para renderizar
+            const originalSchools = schools;
+            schools = filteredSchools;
+            loadSchools();
+            schools = originalSchools;
+        });
+
+        // Limpar busca
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            loadSchools();
+        }
+
+        // Mostrar notificação
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('schoolModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Máscara para telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = value;
+        });
+
+        // Variável global para armazenar a imagem da logo
+        let logoImageData = null;
+
+        // Função para comprimir imagem
+        function compressImage(file, maxWidth = 200, maxHeight = 200, quality = 0.8) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calcular novas dimensões mantendo proporção
+                    let { width, height } = img;
+                    
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height = (height * maxWidth) / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width = (width * maxHeight) / height;
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Desenhar imagem redimensionada
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Converter para base64 com compressão
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedDataUrl);
+                };
+                
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // Manipular upload de logo
+        document.getElementById('logoFile').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Verificar tamanho do arquivo (máx 5MB antes da compressão)
+                if (file.size > 5 * 1024 * 1024) {
+                    showNotification('Arquivo muito grande! Máximo 5MB permitido.', 'error');
+                    e.target.value = '';
+                    return;
+                }
+                
+                // Verificar tipo do arquivo
+                if (!file.type.startsWith('image/')) {
+                    showNotification('Apenas arquivos de imagem são permitidos!', 'error');
+                    e.target.value = '';
+                    return;
+                }
+                
+                try {
+                    // Comprimir imagem antes de armazenar
+                    logoImageData = await compressImage(file);
+                    showLogoPreview(logoImageData);
+                    showNotification('Imagem carregada e otimizada com sucesso!', 'success');
+                } catch (error) {
+                    showNotification('Erro ao processar imagem!', 'error');
+                    e.target.value = '';
+                }
+            }
+        });
+
+        // Mostrar preview da logo
+        function showLogoPreview(imageSrc) {
+            console.log('=== DEBUG: showLogoPreview chamada ===');
+            console.log('imageSrc length:', imageSrc ? imageSrc.length : 'null');
+            console.log('imageSrc preview:', imageSrc ? imageSrc.substring(0, 50) + '...' : 'null');
+            
+            // Limpar dados da imagem removendo possíveis caracteres inválidos
+            const cleanImageData = imageSrc ? imageSrc.replace(/\s+/g, '').trim() : '';
+            console.log('DEBUG: Dados limpos, length:', cleanImageData.length);
+            
+            const preview = document.getElementById('logoPreview');
+            const removeBtn = document.getElementById('removeLogoBtn');
+            const logoTextInput = document.getElementById('logoText');
+            
+            console.log('DEBUG: Definindo innerHTML do preview');
+            preview.innerHTML = `<img src="${cleanImageData}" alt="Preview da Logo" onerror="console.error('Erro no preview da imagem:', this.src.substring(0, 100))">`;
+            removeBtn.style.display = 'block';
+            
+            // Tornar campo de iniciais opcional quando há imagem
+            logoTextInput.required = false;
+            logoTextInput.style.opacity = '0.6';
+            
+            console.log('DEBUG: Preview definido, innerHTML atual:', preview.innerHTML.substring(0, 100) + '...');
+        }
+
+        // Remover logo
+        function removeLogo() {
+            const preview = document.getElementById('logoPreview');
+            const removeBtn = document.getElementById('removeLogoBtn');
+            const logoFileInput = document.getElementById('logoFile');
+            const logoTextInput = document.getElementById('logoText');
+            
+            // Limpar preview
+            preview.innerHTML = '<span class="preview-text">Preview da Logo</span>';
+            removeBtn.style.display = 'none';
+            logoFileInput.value = '';
+            logoImageData = null;
+            
+            // Tornar campo de iniciais obrigatório novamente
+            logoTextInput.required = true;
+            logoTextInput.style.opacity = '1';
+            
+            showNotification('Logo removida com sucesso!', 'success');
+        }
+
+
+
+        // Estrutura de dados com estados e cidades (organizados em ordem alfabética)
+        const estadosCidades = {
+            'AC': ['Acrelândia', 'Assis Brasil', 'Brasileia', 'Bujari', 'Capixaba', 'Cruzeiro do Sul', 'Epitaciolândia', 'Feijó', 'Mâncio Lima', 'Plácido de Castro', 'Rio Branco', 'Sena Madureira', 'Senador Guiomard', 'Tarauacá', 'Xapuri'],
+            'AL': ['Arapiraca', 'Campo Alegre', 'Coruripe', 'Delmiro Gouveia', 'Girau do Ponciano', 'Maceió', 'Marechal Deodoro', 'Palmeira dos Índios', 'Penedo', 'Pilar', 'Rio Largo', 'Santana do Ipanema', 'São Miguel dos Campos', 'União dos Palmares', 'Viçosa'],
+            'AM': ['Autazes', 'Barcelos', 'Coari', 'Humaitá', 'Itacoatiara', 'Lábrea', 'Manacapuru', 'Manicoré', 'Manaus', 'Maués', 'Novo Airão', 'Parintins', 'São Gabriel da Cachoeira', 'Tabatinga', 'Tefé'],
+            'AP': ['Amapá', 'Calçoene', 'Cutias', 'Ferreira Gomes', 'Itaubal', 'Laranjal do Jari', 'Macapá', 'Mazagão', 'Oiapoque', 'Porto Grande', 'Pracuúba', 'Santana', 'Serra do Navio', 'Tartarugalzinho', 'Vitória do Jari'],
+            'BA': ['Alagoinhas', 'Camaçari', 'Eunápolis', 'Feira de Santana', 'Ilhéus', 'Itabuna', 'Jequié', 'Juazeiro', 'Lauro de Freitas', 'Paulo Afonso', 'Porto Seguro', 'Salvador', 'Simões Filho', 'Teixeira de Freitas', 'Vitória da Conquista'],
+            'CE': ['Aquiraz', 'Canindé', 'Caucaia', 'Crateús', 'Crato', 'Fortaleza', 'Iguatu', 'Itapipoca', 'Juazeiro do Norte', 'Maracanaú', 'Maranguape', 'Pacatuba', 'Quixadá', 'Russas', 'Sobral'],
+            'DF': ['Brasília', 'Ceilândia', 'Cruzeiro', 'Gama', 'Lago Norte', 'Lago Sul', 'Núcleo Bandeirante', 'Paranoá', 'Planaltina', 'Recanto das Emas', 'Samambaia', 'Santa Maria', 'São Sebastião', 'Sobradinho', 'Taguatinga'],
+            'ES': ['Aracruz', 'Barra de São Francisco', 'Cachoeiro de Itapemirim', 'Cariacica', 'Castelo', 'Colatina', 'Guarapari', 'Linhares', 'Nova Venécia', 'Santa Teresa', 'São Mateus', 'Serra', 'Viana', 'Vila Velha', 'Vitória'],
+            'GO': ['Águas Lindas de Goiás', 'Anápolis', 'Aparecida de Goiânia', 'Catalão', 'Formosa', 'Goiânia', 'Itumbiara', 'Jataí', 'Luziânia', 'Novo Gama', 'Planaltina', 'Rio Verde', 'Senador Canedo', 'Trindade', 'Valparaíso de Goiás'],
+            'MA': ['Açailândia', 'Bacabal', 'Balsas', 'Barra do Corda', 'Caxias', 'Chapadinha', 'Codó', 'Imperatriz', 'Paço do Lumiar', 'Pedreiras', 'Pinheiro', 'Santa Inês', 'São José de Ribamar', 'São Luís', 'Timon'],
+            'MG': ['Belo Horizonte', 'Betim', 'Contagem', 'Divinópolis', 'Governador Valadares', 'Ibirité', 'Ipatinga', 'Juiz de Fora', 'Montes Claros', 'Poços de Caldas', 'Ribeirão das Neves', 'Santa Luzia', 'Sete Lagoas', 'Uberaba', 'Uberlândia'],
+            'MS': ['Amambai', 'Aquidauana', 'Campo Grande', 'Chapadão do Sul', 'Corumbá', 'Coxim', 'Dourados', 'Maracaju', 'Naviraí', 'Nova Andradina', 'Paranaíba', 'Ponta Porã', 'São Gabriel do Oeste', 'Sidrolândia', 'Três Lagoas'],
+            'MT': ['Alta Floresta', 'Barra do Garças', 'Cáceres', 'Colíder', 'Cuiabá', 'Guarantã do Norte', 'Lucas do Rio Verde', 'Nova Mutum', 'Peixoto de Azevedo', 'Primavera do Leste', 'Rondonópolis', 'Sinop', 'Sorriso', 'Tangará da Serra', 'Várzea Grande'],
+            'PA': ['Abaetetuba', 'Altamira', 'Ananindeua', 'Belém', 'Benevides', 'Bragança', 'Cametá', 'Castanhal', 'Itaituba', 'Marabá', 'Marituba', 'Paragominas', 'Parauapebas', 'Santarém', 'Tucuruí'],
+            'PB': ['Bayeux', 'Cabedelo', 'Cajazeiras', 'Campina Grande', 'Conde', 'Desterro', 'Guarabira', 'João Pessoa', 'Mamanguape', 'Monteiro', 'Patos', 'Picuí', 'Santa Rita', 'Sapé', 'Sousa'],
+            'PE': ['Abreu e Lima', 'Cabo de Santo Agostinho', 'Camaragibe', 'Caruaru', 'Garanhuns', 'Igarassu', 'Ipojuca', 'Jaboatão dos Guararapes', 'Olinda', 'Paulista', 'Petrolina', 'Recife', 'Santa Cruz do Capibaribe', 'São Lourenço da Mata', 'Vitória de Santo Antão'],
+            'PI': ['Altos', 'Barras', 'Campo Maior', 'Corrente', 'Esperantina', 'Floriano', 'Oeiras', 'Parnaíba', 'Pedro II', 'Picos', 'Piripiri', 'São Raimundo Nonato', 'Teresina', 'União', 'Valença do Piauí'],
+            'PR': ['Apucarana', 'Araucária', 'Campo Largo', 'Cascavel', 'Colombo', 'Curitiba', 'Foz do Iguaçu', 'Guarapuava', 'Londrina', 'Maringá', 'Paranaguá', 'Pinhais', 'Ponta Grossa', 'São José dos Pinhais', 'Toledo'],
+            'RJ': ['Barra Mansa', 'Belford Roxo', 'Campos dos Goytacazes', 'Duque de Caxias', 'Itaboraí', 'Magé', 'Mesquita', 'Niterói', 'Nova Friburgo', 'Nova Iguaçu', 'Petrópolis', 'Rio de Janeiro', 'São Gonçalo', 'São João de Meriti', 'Volta Redonda'],
+            'RN': ['Assu', 'Caicó', 'Canguaretama', 'Ceará-Mirim', 'Currais Novos', 'Extremoz', 'João Câmara', 'Macaíba', 'Mossoró', 'Natal', 'Nova Cruz', 'Parnamirim', 'Santo Antônio', 'São Gonçalo do Amarante', 'Touros'],
+            'RO': ['Ariquemes', 'Cacoal', 'Cerejeiras', 'Colorado do Oeste', 'Espigão d\'Oeste', 'Guajará-Mirim', 'Jaru', 'Ji-Paraná', 'Machadinho d\'Oeste', 'Ouro Preto do Oeste', 'Pimenta Bueno', 'Porto Velho', 'Presidente Médici', 'Rolim de Moura', 'Vilhena'],
+            'RR': ['Alto Alegre', 'Amajari', 'Boa Vista', 'Bonfim', 'Cantá', 'Caracaraí', 'Caroebe', 'Iracema', 'Mucajaí', 'Normandia', 'Pacaraima', 'Rorainópolis', 'São João da Baliza', 'São Luiz', 'Uiramutã'],
+            'RS': ['Alvorada', 'Canoas', 'Caxias do Sul', 'Gravataí', 'Novo Hamburgo', 'Passo Fundo', 'Pelotas', 'Porto Alegre', 'Rio Grande', 'Santa Cruz do Sul', 'Santa Maria', 'São Leopoldo', 'Sapucaia do Sul', 'Uruguaiana', 'Viamão'],
+            'SC': ['Araranguá', 'Balneário Camboriú', 'Blumenau', 'Caçador', 'Chapecó', 'Concórdia', 'Criciúma', 'Florianópolis', 'Içara', 'Itajaí', 'Joinville', 'Lages', 'Palhoça', 'São José', 'Tubarão'],
+            'SE': ['Aquidabã', 'Aracaju', 'Barra dos Coqueiros', 'Canindé de São Francisco', 'Carmópolis', 'Estância', 'Glória', 'Itabaiana', 'Lagarto', 'Nossa Senhora do Socorro', 'Poço Redondo', 'Propriá', 'Simão Dias', 'São Cristóvão', 'Tobias Barreto'],
+            'SP': ['Campinas', 'Diadema', 'Guarulhos', 'Jundiaí', 'Mauá', 'Mogi das Cruzes', 'Osasco', 'Piracicaba', 'Ribeirão Preto', 'Santo André', 'Santos', 'São Bernardo do Campo', 'São José dos Campos', 'São Paulo', 'Sorocaba'],
+            'TO': ['Alvorada', 'Araguaína', 'Araguatins', 'Augustinópolis', 'Colinas do Tocantins', 'Dianópolis', 'Guaraí', 'Gurupi', 'Miracema do Tocantins', 'Palmas', 'Paraíso do Tocantins', 'Pedro Afonso', 'Porto Nacional', 'Tocantinópolis', 'Xambioá']
+        };
+
+        // Função para carregar cidades baseado no estado selecionado
+        function carregarCidades() {
+            const estadoSelect = document.getElementById('estado');
+            const cidadeSelect = document.getElementById('cidade');
+            const estadoSelecionado = estadoSelect.value;
+            
+            // Limpar opções de cidade
+            cidadeSelect.innerHTML = '<option value="">Selecione a cidade</option>';
+            
+            if (estadoSelecionado && estadosCidades[estadoSelecionado]) {
+                // Habilitar o seletor de cidade
+                cidadeSelect.disabled = false;
+                
+                // Adicionar cidades do estado selecionado
+                estadosCidades[estadoSelecionado].forEach(cidade => {
+                    const option = document.createElement('option');
+                    option.value = cidade;
+                    option.textContent = cidade;
+                    cidadeSelect.appendChild(option);
+                });
+            } else {
+                // Desabilitar o seletor de cidade se nenhum estado for selecionado
+                cidadeSelect.disabled = true;
+                cidadeSelect.innerHTML = '<option value="">Primeiro selecione o estado</option>';
+            }
+        }
+
+        // Carregar escolas ao inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSchools();
+        });
+    </script>
+</body>
+</html>
